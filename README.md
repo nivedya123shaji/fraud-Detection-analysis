@@ -48,4 +48,4 @@ FinTech / Financial Crime Analytics / Cybersecurity Analytics
 3. SQL query files are in the /sql-queries folder
 
 ## Contact
-Your Name | your.email@gmail.com | LinkedIn: linkedin.com/in/yourname
+Nivedya | nivedyapayyathil123@gmil.com | LinkedIn: https://www.linkedin.com/in/nivedya-shaji/
