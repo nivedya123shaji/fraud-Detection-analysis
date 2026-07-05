@@ -46,6 +46,10 @@ FinTech / Financial Crime Analytics / Cybersecurity Analytics
 1. Open the .pbix file in Power BI Desktop (free download from microsoft.com)
 2. The dashboard connects to the PaySim dataset
 
+# Power BI Fraud Detection Dashboard
+## Dashboard Preview
+![Dashboard](page1.Overview.png)
+
 ## SQL queries 
 sql
 CREATE DATABASE fraud_db;
