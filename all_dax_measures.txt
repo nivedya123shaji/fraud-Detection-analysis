@@ -1,0 +1,73 @@
+ Create Calculated Columns (DAX)
+
+1. Fraud Status = IF(fraud_summary[isFraud] = 1, "Fraud", "Legitimate")
+2.Balance Drop = fraud_summary[oldbalanceOrg] - fraud_summary[newbalanceOrig]
+3.Flagging Status = 
+    IF(fraud_summary[isFraud] = 1 && fraud_summary[isFlaggedFraud] = 0, "Missed Fraud",
+    IF(fraud_summary[isFraud] = 1 && fraud_summary[isFlaggedFraud] = 1, "Correctly Flagged",
+    IF(fraud_summary[isFraud] = 0 && fraud_summary[isFlaggedFraud] = 1, "False Alarm", "Legitimate")))
+4.Day Number = INT(fraud_summary[step] / 24) + 1
+5.Is Zero Drain =
+    IF(
+        fraud_summary[newbalanceOrig] = 0 && fraud_summary[isFraud] = 1,
+        "Drained to Zero",
+        "Partial or No Drain"
+    )
+6.Suspicious Pattern =
+    IF(
+        fraud_summary[newbalanceOrig] = 0 && fraud_summary[isFraud] = 1,
+        "Account Drained",
+        IF(
+            fraud_summary[newbalanceDest] = fraud_summary[oldbalanceDest] && fraud_summary[isFraud] = 1,
+            "Phantom Destination",
+            IF(
+                fraud_summary[oldbalanceOrg] = fraud_summary[newbalanceOrig] && fraud_summary[amount] > 0,
+                "Balance Unchanged",
+                "Normal"
+            )
+        )
+    )
+7.Balance Drain Ratio % =
+    IF(
+        fraud_summary[oldbalanceOrg] = 0,
+        0,
+        DIVIDE(fraud_summary[amount], fraud_summary[oldbalanceOrg]) * 100
+    )
+8.Dest Balance Change =
+    fraud_summary[newbalanceDest] - fraud_summary[oldbalanceDest]
+
+
+ Create DAX Measures
+1.Total Transactions = COUNTROWS(fraud_summary)
+2.Total Fraud = CALCULATE(COUNTROWS(fraud_summary), fraud_summary[isFraud] = 1)
+3.Fraud Rate % = DIVIDE([Total Fraud], [Total Transactions]) * 100
+4.Total Fraud Amount = CALCULATE(SUM(fraud_summary[amount]), fraud_summary[isFraud] = 1)
+5.Avg Fraud Amount = CALCULATE(AVERAGE(fraud_summary[amount]), fraud_summary[isFraud] = 1)
+6.Avg Legit Amount = CALCULATE(AVERAGE(fraud_summary[amount]), fraud_summary[isFraud] = 0)
+7.Missed Frauds = CALCULATE(COUNTROWS(fraud_summary), fraud_summary[isFraud] = 1, fraud_summary[isFlaggedFraud] = 0)
+8.Detection Rate % = DIVIDE(CALCULATE(COUNTROWS(fraud_summary), fraud_summary[isFraud]=1, fraud_summary[isFlaggedFraud]=1), [Total Fraud]) * 100
+9.Total Legit Amount = CALCULATE(SUM(fraud_summary[amount]), fraud_summary[isFraud] = 0)
+10.Max Fraud Amount = CALCULATE(MAX(fraud_summary[amount]), fraud_summary[isFraud] = 1)
+11.Zero Balance Drain Count =
+    CALCULATE(
+        COUNTROWS(fraud_summary),
+        fraud_summary[isFraud] = 1,
+        fraud_summary[newbalanceOrig] = 0
+    )
+12.Phantom Dest Count =
+    CALCULATE(
+        COUNTROWS(fraud_summary),
+        fraud_summary[isFraud] = 1,
+        fraud_summary[newbalanceDest] = fraud_summary[oldbalanceDest]
+    )
+13.Avg Drain Ratio % =
+    CALCULATE(
+        AVERAGE(fraud_summary[Balance Drain Ratio %]),
+        fraud_summary[isFraud] = 1
+    )
+14.Top 20% Fraud Share =
+    DIVIDE(
+        CALCULATE([Total Fraud], fraud_summary[amount_category] = "Very High"),
+        [Total Fraud]
+    ) * 100
+15.
