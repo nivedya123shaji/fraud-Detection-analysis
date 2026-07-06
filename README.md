@@ -54,15 +54,14 @@ FinTech / Financial Crime Analytics / Cybersecurity Analytics
 
 ![Dashboard](page3-FraudPatternAnalysis.png) 
 
-## SQL queries 
-sql
+## SQL-Queries 
+```sql
 CREATE DATABASE fraud_db;
-
+```
+```sql
 USE fraud_db;
-
-
-3D. Create the Table to Store Your Data
-
+```
+#Create the Table to Store Your Data
 ```sql
 CREATE TABLE online_fraud (
     step INT,
@@ -83,8 +82,7 @@ CREATE TABLE online_fraud (
 SELECT COUNT(*) FROM online_fraud;
 ```
 
-Check for NULL values
-
+#Check for NULL values
 ```sql
 SELECT 
     SUM(CASE WHEN step IS NULL THEN 1 ELSE 0 END) AS null_step,
@@ -94,26 +92,24 @@ SELECT
 FROM online_fraud;
 ```
 
--- Check distinct transaction types
+#Check distinct transaction types
 ```sql
 SELECT DISTINCT type FROM online_fraud;
 ```
-
--- Check amount range
+#Check amount range
 ```sql
 SELECT MIN(amount), MAX(amount), AVG(amount) FROM online_fraud;
 ```
 
--- Check fraud vs non-fraud split
+#Check fraud vs non-fraud split
 ```sql
 SELECT isFraud, COUNT(*) as total 
 FROM online_fraud 
 GROUP BY isFraud;
 ```
 
-STEP 4 — ANALYZE 
-
-Analysis Query 1 — Total Fraud vs Legitimate Transactions
+--STEP 4 — ANALYZE 
+#Analysis Query 1 — Total Fraud vs Legitimate Transactions
 ```sql
 SELECT 
     isFraud,
@@ -122,8 +118,7 @@ SELECT
 FROM online_fraud
 GROUP BY isFraud;
 ```
-
-Analysis Query 2 — Fraud by Transaction Type
+#Analysis Query 2 — Fraud by Transaction Type
 ```sql
 SELECT 
     type,
@@ -135,8 +130,7 @@ FROM online_fraud
 GROUP BY type
 ORDER BY fraud_count DESC;
 ```
-
-Analysis Query 3 — Average Amount: Fraud vs Normal
+#Analysis Query 3 — Average Amount: Fraud vs Normal
 ```sql
 SELECT 
     isFraud,
@@ -147,8 +141,7 @@ SELECT
 FROM online_fraud
 GROUP BY isFraud;
 ```
-
-Analysis Query 4 — Flagging System Accuracy (Missed Frauds)
+#Analysis Query 4 — Flagging System Accuracy (Missed Frauds)
 ```sql
 SELECT 
     isFraud,
@@ -158,8 +151,7 @@ FROM online_fraud
 GROUP BY isFraud, isFlaggedFraud;
 -- This shows you how many REAL frauds were NOT flagged (isFraud=1, isFlaggedFraud=0)
 ```
-
-Analysis Query 5 — Fraud by Time Step (Hourly Trend)
+#Analysis Query 5 — Fraud by Time Step (Hourly Trend)
 ```sql
 SELECT 
     step,
@@ -169,8 +161,7 @@ FROM online_fraud
 GROUP BY step
 ORDER BY step;
 ```
-
-Analysis Query 6 — Balance Anomaly (Fraud Drains Accounts to Zero)
+#Analysis Query 6 — Balance Anomaly (Fraud Drains Accounts to Zero)
 ```sql
 SELECT 
     type,
@@ -181,8 +172,7 @@ FROM online_fraud
 WHERE isFraud = 1
 GROUP BY type;
 ```
-
-Analysis Query 7 — Top 10 Largest Fraud Transactions
+#Analysis Query 7 — Top 10 Largest Fraud Transactions
 ```sql
 SELECT 
     nameOrig, 
@@ -197,8 +187,7 @@ WHERE isFraud = 1
 ORDER BY amount DESC
 LIMIT 10;
 ```
-
-Analysis Query 8 — Amount Bucket Analysis (Is High Amount = More Fraud?)
+#Analysis Query 8 — Amount Bucket Analysis (Is High Amount = More Fraud?)
 ```sql
 SELECT 
     CASE 
