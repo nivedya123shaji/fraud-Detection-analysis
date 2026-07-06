@@ -50,6 +50,8 @@ FinTech / Financial Crime Analytics / Cybersecurity Analytics
 ## Dashboard Preview
 ![Dashboard](page1.Overview.png)
 
+![Dashboard](page2-Fraud Pattern Analysis.png)
+
 ## SQL queries 
 sql
 CREATE DATABASE fraud_db;
