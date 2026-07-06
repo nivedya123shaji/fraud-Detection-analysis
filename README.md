@@ -50,7 +50,11 @@ FinTech / Financial Crime Analytics / Cybersecurity Analytics
 ## Dashboard Preview
 ![Dashboard](page1.Overview.png)
 
-![Dashboard](page2-FraudForensics-overview.png)
+![Dashboard](page2-FraudPatternAnalysis.png)
+
+![Dashboard](page2-FraudForensics-overview.png) 
+
+
 
 ## SQL queries 
 sql
